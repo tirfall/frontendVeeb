@@ -10,9 +10,8 @@ function Kasutajad() {
     const eesnimiRef = useRef();
     const perenimiRef = useRef();
 
-    // Fetch users from the API on component mount
     useEffect(() => {
-        fetch("https://localhost:7044/api/kasutaja")
+        fetch("https://localhost:7124/api/kasutaja")
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch users");
@@ -23,9 +22,8 @@ function Kasutajad() {
             .catch(error => console.error("Error fetching users:", error));
     }, []);
 
-    // Delete a user by ID
     function kustuta(id) {
-        fetch(`https://localhost:7044/api/kasutaja/${id}`, { method: "DELETE" })
+        fetch(`https://localhost:7124/api/kasutaja/${id}`, { method: "DELETE" })
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to delete user");
@@ -36,7 +34,6 @@ function Kasutajad() {
             .catch(error => console.error("Error deleting user:", error));
     }
 
-    // Add a new user
     function lisa() {
         const uusKasutaja = {
             id: Number(idRef.current.value),
@@ -46,7 +43,7 @@ function Kasutajad() {
             perenimi: perenimiRef.current.value,
         };
 
-        fetch("https://localhost:7044/api/kasutaja/lisa", {
+        fetch("https://localhost:7124/api/kasutaja/lisa", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -60,9 +57,8 @@ function Kasutajad() {
                 return res.json();
             })
             .then(json => {
-                setKasutajad(json); // Update the state to display all users, including the new one
+                setKasutajad(json); 
 
-                // Clear the input fields after successfully adding a user
                 idRef.current.value = '';
                 kasutajanimiRef.current.value = '';
                 paroolRef.current.value = '';
@@ -74,6 +70,8 @@ function Kasutajad() {
 
     return (
         <div className="Kasutajad">
+            <Navigation /> {}
+
             <h2>Lisa Kasutaja</h2>
             <label>ID</label> <br />
             <input ref={idRef} type="number" /> <br />

@@ -1,7 +1,7 @@
 // App.js
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navigation from './navigation'; // Импорт компонента навигации
+import Navigation from './navigation'; 
 import './styles/tooted.css';
 
 function App() {
@@ -75,8 +75,9 @@ function App() {
 
     return (
         <div className="App">
-            <Navigation /> {/* Добавляем компонент навигации */}
+            <Navigation /> {}
 
+            <h2>Lisa Toode</h2>
             <label>ID</label> <br />
             <input ref={idRef} type="number" /> <br />
             <label>Nimi</label> <br />
@@ -87,14 +88,17 @@ function App() {
             <input ref={isActiveRef} type="checkbox" /> <br />
             <button onClick={lisa}>Lisa</button>
 
+            <h2>Tooted</h2>
+            <div className='tooted-list'>
             {tooted.map((toode, index) => (
-                <div key={toode.id}>
+                <div key={toode.id} className='toode-item'>
                     <div><strong>ID:</strong> {toode.id}</div>
                     <div><strong>Nimi:</strong> {toode.name}</div>
                     <div><strong>Hind:</strong> {toode.price}</div>
                     <button onClick={() => kustuta(index)}>Kustuta</button>
                 </div>
             ))}
+            </div>
 
             <button onClick={dollariteks}>Muuda dollariteks</button>
         </div>
