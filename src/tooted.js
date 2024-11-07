@@ -1,7 +1,7 @@
 // App.js
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navigation from './navigation'; 
+import Navigation from './navigation';
 import './styles/tooted.css';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
     }, []);
 
     function kustuta(index) {
-        fetch(`https://localhost:7124/api/tooted/${index}`, { method: "DELETE" })
+        fetch(`https://localhost:7124/api/tooted/kustuta/${index}`, { method: "DELETE" }) // Обновлено для соответствия бэкенду
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to delete product");
@@ -43,12 +43,12 @@ function App() {
             isActive: isActiveRef.current.checked
         };
 
-        fetch("https://localhost:7124/api/tooted/lisa", {
+        // Изменяем URL, чтобы передать параметры через строку запроса
+        fetch(`https://localhost:7124/api/tooted/lisa/${uusToode.id}/${uusToode.name}/${uusToode.price}/${uusToode.isActive}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify(uusToode)
+            }
         })
             .then(res => {
                 if (!res.ok) {
@@ -72,6 +72,17 @@ function App() {
             .then(json => setTooted(json))
             .catch(error => console.error("Error converting prices:", error));
     }
+    function kustutakoik() {
+        fetch("https://localhost:7124/api/tooted/kustuta-kõik", { method: "DELETE" })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Failed to delete all products");
+                }
+                return res.json();
+            })
+            .then(json => setTooted(json)) // Обновляем состояние, чтобы отобразить пустой список
+            .catch(error => console.error("Error deleting all products:", error));
+    }
 
     return (
         <div className="App">
@@ -90,17 +101,18 @@ function App() {
 
             <h2>Tooted</h2>
             <div className='tooted-list'>
-            {tooted.map((toode, index) => (
-                <div key={toode.id} className='toode-item'>
-                    <div><strong>ID:</strong> {toode.id}</div>
-                    <div><strong>Nimi:</strong> {toode.name}</div>
-                    <div><strong>Hind:</strong> {toode.price}</div>
-                    <button onClick={() => kustuta(index)}>Kustuta</button>
-                </div>
-            ))}
+                {tooted.map((toode, index) => (
+                    <div key={toode.id} className='toode-item'>
+                        <div><strong>ID:</strong> {toode.id}</div>
+                        <div><strong>Nimi:</strong> {toode.name}</div>
+                        <div><strong>Hind:</strong> {toode.price}</div>
+                        <button onClick={() => kustuta(index)}>Kustuta</button>
+                    </div>
+                ))}
             </div>
 
             <button onClick={dollariteks}>Muuda dollariteks</button>
+            <button onClick={kustutakoik}>Kustuta kõik</button>
         </div>
     );
 }
